@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(lab9 VERSION 1.0)
+project(proj02 VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
