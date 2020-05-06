@@ -99,14 +99,13 @@ int main(int argc, char** argv) {
     world.append(Sphere(l1.position(), .25, glm::vec3(1,1,1)));
 
     // and the spheres
-    world.append(Sphere(glm::vec3(1, 1, 1), 1, rand_color()));
-    world.append(Sphere(glm::vec3(2, 2, 4), 2, rand_color()));
-    world.append(Sphere(glm::vec3(3, 3, 6), 3, rand_color()));
+    world.append(Sphere(glm::vec3(-1, -1, 3), 1, glm::vec3(0.5f, 0.5f, 0.0f)));
+    world.append(Sphere(glm::vec3(-2, 2, 1), 2, glm::vec3(0.5f, 0.0f, 0.5f)));
+    world.append(Sphere(glm::vec3(3, 3, 1), 1, glm::vec3(0.0f, 0.5f, 0.5f)));
 
-    // and add some boxes and prep world for rendering
-    for (int i = 0 ; i < NUM_BOXES ; ++i) {
-        world.append(random_box());
-    }
+    // and add a box
+    world.append(Obj::make_box(glm::vec3(1, 1, 0), 1, glm::vec3(0.9f, 0.5f, 0.5f)));
+    world.append(Obj::make_box(glm::vec3(-3, -1, 1), 2, glm::vec3(0.9f, 0.5f, 0.5f)));
     world.lock();
 
     // create the intersector
