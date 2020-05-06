@@ -54,12 +54,36 @@ class Renderer {
         glm::vec3 color = camera.background;
         if (hit.is_intersection()) {
             color = glm::vec3(0,0,0);
-            for (auto light : lights) {
+            for (auto light : lights)
+            {
+                //phong shading
                 color += phong(hit, light, camera.pos);
+                
+                
+
             }
+        
+            
         }
+
+        
         return color;
     }
+
+    glm::vec3 reflect(const Camera& camera, const Lights& lights, const Hit& hit, const Ray& ray, const World& world)
+    {
+        //create ray reflected off surface on other side of surface normal
+        if (hit.is_intersection())
+        {
+            glm::vec3 normal = hit.normal();
+            Ray reflectedRay;
+            reflectedRay.origin = hit.position();
+            reflectedRay.direction = ray.direction - (2.0f * (glm::dot(normal, ray.direction) * normal));
+            Hit newHit = _intersector->find_first_intersection(world, reflectedRay);
+            if (newHit.is_intersection()){return newHit.color();}else{return glm::vec3(0,0,0);}
+        } else {return glm::vec3(0,0,0);}
+    }
+        
 
     glm::vec3 render_pixel(
         const Camera& camera,
@@ -69,7 +93,7 @@ class Renderer {
     ) {
 
         Hit hit = _intersector->find_first_intersection(world, ray);
-        return shade(camera, lights, hit);
+        return shade(camera, lights, hit) + reflect(camera, lights, hit, ray, world);
     }
 
 public:

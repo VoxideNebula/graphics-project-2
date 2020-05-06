@@ -99,9 +99,9 @@ int main(int argc, char** argv) {
     world.append(Sphere(l1.position(), .25, glm::vec3(1,1,1)));
 
     // and the spheres
-    world.append(Sphere(glm::vec3(1, 1, 1), 1, rand_color()));
-    world.append(Sphere(glm::vec3(2, 2, 4), 2, rand_color()));
-    world.append(Sphere(glm::vec3(3, 3, 6), 3, rand_color()));
+    world.append(Sphere(glm::vec3(-1, -1, 1), 1, rand_color()));
+    world.append(Sphere(glm::vec3(-2, 2, 1), 2, rand_color()));
+    world.append(Sphere(glm::vec3(3, 3, 1), 1, rand_color()));
 
     // and add some boxes and prep world for rendering
     for (int i = 0 ; i < NUM_BOXES ; ++i) {
