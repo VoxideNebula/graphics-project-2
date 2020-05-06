@@ -25,7 +25,7 @@ class Renderer {
 
         float ambientStrength = 0.2;
         float specularStrength = 0.5;
-        float shinyness = 2;
+        float shinyness = 4;
 
         glm::vec3 pos = hit.position();
         glm::vec3 normal = hit.normal();
@@ -70,7 +70,7 @@ class Renderer {
         return color;
     }
 
-    glm::vec3 reflect(const Camera& camera, const Lights& lights, const Hit& hit, const Ray& ray, const World& world)
+    glm::vec3 reflect(const Camera& camera, const Lights& lights, const Hit& hit, const Ray& ray, const World& world, int levels)
     {
         //create ray reflected off surface on other side of surface normal
         if (hit.is_intersection())
@@ -81,8 +81,20 @@ class Renderer {
             reflectedRay.direction = ray.direction - (2.0f * (glm::dot(normal, ray.direction) * normal));
             reflectedRay.origin += 0.001f * reflectedRay.direction;
             Hit newHit = _intersector->find_first_intersection(world, reflectedRay);
-            if (newHit.is_intersection()){return shade(glm::vec3(0,0,0), reflectedRay.origin, lights, newHit);}else{return glm::vec3(0,0,0);}
-        } else {return glm::vec3(0,0,0);}
+            if (newHit.is_intersection())
+            {
+                if (levels > 0){return (shade(glm::vec3(0,0,0), reflectedRay.origin, lights, newHit)) + (0.7f * reflect(camera, lights, newHit, reflectedRay, world, levels-1));}
+                else {return shade(glm::vec3(0,0,0), reflectedRay.origin, lights, newHit);}
+            }
+            else
+            {
+                return glm::vec3(0,0,0);
+            }
+        }
+        else
+        {
+            return glm::vec3(0,0,0);
+        }
     }
         
 
@@ -94,7 +106,7 @@ class Renderer {
     ) {
 
         Hit hit = _intersector->find_first_intersection(world, ray);
-        return shade(camera.background, camera.pos, lights, hit) + 0.8f * reflect(camera, lights, hit, ray, world);
+        return shade(camera.background, camera.pos, lights, hit) + 0.7f * reflect(camera, lights, hit, ray, world, 3);
     }
 
 public:
